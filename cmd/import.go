@@ -102,6 +102,7 @@ var importCustomersCmd = &cobra.Command{
 }
 
 func init() {
+	// Commands
 	rootCmd.AddCommand(importCustomersCmd)
 
 	// Flags
