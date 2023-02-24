@@ -1,0 +1,38 @@
+# Go binaries
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Go test and coverage files
+*.test
+*.out
+*.cover
+*.prof
+
+# Go build output
+/bin/
+/pkg/
+/*.exe
+/*.test
+/*.prof
+/*.trace
+
+# Dependency directories
+/vendor/
+/go.sum
+/go.mod
+
+# IDE files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# OS-specific files
+Thumbs.db
+.DS_Store
+
+# Miscellaneous
+*.log
