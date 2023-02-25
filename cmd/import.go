@@ -14,7 +14,7 @@ import (
 // importCustomersCmd represents the importCustomers command
 var importCustomersCmd = &cobra.Command{
 	Use:   "import:customers",
-	Short: "A brief description of your command",
+	Short: "Import customers from a CSV file",
 	Run: func(cmd *cobra.Command, args []string) {
 		// Check if the required flag is set
 		if !cmd.Flag("file").Changed {

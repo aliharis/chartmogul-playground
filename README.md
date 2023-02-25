@@ -73,3 +73,4 @@ Use "chartmogul-playground [command] --help" for more information about a comman
 | Import customers from a CSV file                        | `chartmogul-playground import:customers --file=resources/customers.csv --datasource=DATASOURCE_UUID` |
 | Set random sales rep for customers froma CSV file       | `chartmogul-playground customers:set-sales-rep --file=resources/sales_reps.csv`                      |
 | Generate dummy invoices and subscriptions for customers | `chartmogul-playground generate:invoices --datasource=DATASOURCE_UUID`                               |
+| Retrieve MRR data for a period                          | `chartmogul-playground insights:mrr --from=2019-01-01 --to=2019-05-01`                               |
