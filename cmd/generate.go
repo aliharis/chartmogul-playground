@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/aliharis/chartmogul-playground/utils/chartmogul"
+	"github.com/aliharis/chartmogul-playground/utils/helpers"
 	cm "github.com/chartmogul/chartmogul-go/v3"
 	"github.com/spf13/cobra"
 )
@@ -34,33 +35,36 @@ var generateInvoices = &cobra.Command{
 			return
 		}
 
-		// Run the generator for the provided date range (interval of 1 month)
-		// TODO: Parameterize the date range
-		startDate := time.Date(2019, 1, 1, 0, 0, 0, 0, time.UTC)
-		endDate := time.Date(2019, 4, 1, 0, 0, 0, 0, time.UTC)
-
-		// Set the initial date to the start date
-		date := startDate
+		// Set the invoice sequence to 0
 		sequence := 0
 
-		// Iterate over the date range with a 1-month interval
-		for date.Before(endDate) || date.Equal(endDate) {
-			// Increment the date by 1 month
-			dueDate := date.AddDate(0, 0, 7)
-			servicePeriodEndDate := date.AddDate(0, 1, 0)
+		// Iterate over the customers
+		for _, customer := range customers.Entries {
+			// Select a random plan for the customer
+			rand.Seed(time.Now().UnixNano())
+			plan := monthlyPlans[rand.Intn(len(monthlyPlans))]
+			price := 5000
+			if plan.Name == "Gold plan" {
+				price = 10000
+			}
+
+			// Run the generator for the provided date range (interval of 1 month)
+			// TODO: Parameterize the date range
+			startDate := time.Date(2019, 1, 1, 0, 0, 0, 0, time.UTC)
+			endDate := time.Date(2019, 4, 1, 0, 0, 0, 0, time.UTC)
+			date := startDate
+
+			// Generate one subscription ID per customer to be used in the invoice
+			subscriptionId := helpers.GenerateSubscriptionId()
 
 			// Do something with the date
-			fmt.Println("Generating the invoices for:", date.Format("2006-01-02"))
+			fmt.Println("Generating the invoices for:", customer.Name)
 
 			// Iterate over the customers
-			for _, customer := range customers.Entries {
-				// Select a random plan for the customer
-				rand.Seed(time.Now().UnixNano())
-				plan := monthlyPlans[rand.Intn(len(monthlyPlans))]
-				price := 5000
-				if plan.Name == "Gold plan" {
-					price = 10000
-				}
+			for date.Before(endDate) || date.Equal(endDate) {
+				// Increment the date by 1 month
+				dueDate := date.AddDate(0, 0, 7)
+				servicePeriodEndDate := date.AddDate(0, 1, 0)
 				sequence = sequence + 1
 
 				// Create a new invoice for the customer
@@ -75,8 +79,8 @@ var generateInvoices = &cobra.Command{
 						LineItems: []*cm.LineItem{
 							&cm.LineItem{
 								Type:                      "subscription",
-								SubscriptionExternalID:    fmt.Sprintf("sub_%03d", sequence),
-								SubscriptionSetExternalID: fmt.Sprintf("set_%03d", sequence),
+								SubscriptionExternalID:    fmt.Sprintf("sub_%s", subscriptionId),
+								SubscriptionSetExternalID: fmt.Sprintf("set_%s", subscriptionId),
 								PlanUUID:                  plan.UUID,
 								ServicePeriodStart:        date.Format("2006-01-02 00:00:00"),
 								ServicePeriodEnd:          servicePeriodEndDate.Format("2006-01-02 00:00:00"),
@@ -101,11 +105,13 @@ var generateInvoices = &cobra.Command{
 					return
 				}
 
-				fmt.Println("Generating invoices for customer:", customer.Name, plan.Name)
+				fmt.Println("Generated invoices for period:", date.Format("2006-01-02 00:00:00"), "to", servicePeriodEndDate.Format("2006-01-02 00:00:00"))
+
+				// Increment the date by 1 month
+				date = date.AddDate(0, 1, 0)
 			}
 
-			// Increment the date by 1 month
-			date = date.AddDate(0, 1, 0)
+			fmt.Println("")
 		}
 	},
 }
