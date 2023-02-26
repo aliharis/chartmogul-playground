@@ -2,17 +2,6 @@
 
 ChartMogul playground is a CLI tool to interact with ChartMogul API and primarily use for importing data to ChartMogul.
 
-## Pre-requisite
-
-Setup your ChartMogul API key as an environment variable
-
-`export CHARTMOGUL_API_KEY=YOUR_API_KEY`
-
-This is the documentation for the Go Application.
-Description
-
-This is a simple Go application that performs a specific task. The application has been developed using Go 1.16.
-
 ## Installation
 
 To clone this application, run the following command:
